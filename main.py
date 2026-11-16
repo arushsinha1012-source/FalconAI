@@ -160,25 +160,26 @@ def get_falcon_response(user_input):
 
 async def main(page: ft.Page):
     page.title = "Falcon AI"
-    page.theme_mode = "light"
+    page.theme_mode = ft.ThemeMode.LIGHT
     page.bgcolor = "#ffffff"
-    page.padding = 0
+    page.padding = 20
 
     def show_main_screen():
         page.controls.clear()
         page.bgcolor = "#ffffff"
         page.padding = 20
 
-        welcome_title = ft.Container(
-            content=ft.Text(
-                "Welcome To Falcon!",
-                size=26,
-                weight="bold",
-                color="#000000",
-                text_align="center"
-            ),
-            alignment=ft.alignment.center,
-            padding=ft.padding.only(top=20, bottom=10)
+        welcome_title = ft.Row(
+            [
+                ft.Text(
+                    "Welcome To Falcon!",
+                    size=26,
+                    weight=ft.FontWeight.BOLD,
+                    color="#000000",
+                    text_align=ft.TextAlign.CENTER
+                )
+            ],
+            alignment=ft.MainAxisAlignment.CENTER
         )
 
         chat_list = ft.ListView(expand=True, spacing=12, auto_scroll=True)
@@ -198,31 +199,98 @@ async def main(page: ft.Page):
             chat_list.controls.append(ft.Text(f"You: {msg}", color="#1e293b", size=15))
             input_box.value = ""
             reply = get_falcon_response(msg)
-            chat_list.controls.append(ft.Text(f"Falcon: {reply}", color="#0f172a", weight="bold", size=15))
+            chat_list.controls.append(
+                ft.Text(f"Falcon: {reply}", color="#0f172a", weight=ft.FontWeight.BOLD, size=15)
+            )
             page.update()
 
         input_box.on_submit = send_click
         send_btn = ft.ElevatedButton("Send", on_click=send_click, bgcolor="#0f172a", color="#ffffff")
 
-        page.add(welcome_title, chat_list, ft.Row([input_box, send_btn], alignment="center"))
+        page.add(
+            ft.Container(height=15),
+            welcome_title,
+            ft.Divider(color="#e2e8f0"),
+            chat_list,
+            ft.Row([input_box, send_btn], alignment=ft.MainAxisAlignment.CENTER)
+        )
         page.update()
 
-    already_opened = await page.client_storage.get_async("falcon_first_launch_done")
+    try:
+        already_opened = await page.client_storage.get_async("falcon_first_launch_done")
+    except Exception:
+        already_opened = False
 
     if not already_opened:
-        await page.client_storage.set_async("falcon_first_launch_done", True)
-        page.bgcolor = "#000000"
-        intro_active = True
+        try:
+            await page.client_storage.set_async("falcon_first_launch_done", True)
+        except Exception:
+            pass
 
-        def finish_intro():
-            nonlocal intro_active
-            if not intro_active:
-                return
-            intro_active = False
-            try:
+        bg_audio = None
+        try:
+            import flet_audio as fta
+            bg_audio = fta.Audio(src="song.mp3", autoplay=True)
+            page.overlay.append(bg_audio)
+        except Exception:
+            pass
+
+        try:
+            import flet_video as ftv
+            page.bgcolor = "#000000"
+            page.padding = 0
+            petals_vid = ftv.Video(
+                playlist=[ftv.VideoMedia("petals.mp4")],
+                autoplay=True,
+                show_controls=False,
+                expand=True,
+                fit=ft.BoxFit.COVER
+            )
+            page.add(petals_vid)
+            page.update()
+            await asyncio.sleep(6)
+        except Exception:
+            page.bgcolor = "#fff1f2"
+            petals = [
+                ft.Container(
+                    width=18,
+                    height=26,
+                    bgcolor="#fb7185",
+                    border_radius=12,
+                    left=random.randint(20, 320),
+                    top=random.randint(-120, -20),
+                    rotate=random.uniform(0, 3.14),
+                    animate_position=3500,
+                    animate_rotation=3500
+                )
+                for _ in range(18)
+            ]
+            title_intro = ft.Column(
+                [
+                    ft.Text("🌸 Falcon AI 🌸", size=30, weight=ft.FontWeight.BOLD, color="#881337"),
+                    ft.Text("Offline Neural Intelligence", size=14, color="#9f1239")
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                expand=True
+            )
+            page.add(ft.Stack([title_intro] + petals, expand=True))
+            page.update()
+            await asyncio.sleep(0.2)
+            for p in petals:
+                p.top = random.randint(550, 800)
+                p.left = max(10, min(330, p.left + random.randint(-60, 60)))
+                p.rotate += 3.14
+            page.update()
+            await asyncio.sleep(5)
+
+        try:
+            if bg_audio is not None:
                 bg_audio.pause()
-            except Exception:
-                pass
-            page.overlay.clear()
-            show_main_screen()
+        except Exception:
+            pass
+        show_main_screen()
+    else:
+        show_main_screen()
 
+ft.run(main, assets_dir="assets")
