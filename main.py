@@ -71,7 +71,6 @@ TRAINING_DATA = [
 
 ANN = FalconNeuralNetwork(len(VOCAB), 10, 5)
 ANN.train(TRAINING_DATA)
-
 CAPITALS = {
     "india": "New Delhi", "united states": "Washington, D.C.", "usa": "Washington, D.C.",
     "china": "Beijing", "japan": "Tokyo", "germany": "Berlin", "united kingdom": "London",
@@ -157,7 +156,6 @@ def get_falcon_response(user_input):
         return "That topic is not in my offline database. Ask about gravity, force, atom, cell, DNA, or acid."
 
     return "Sorry, I can only answer questions available in my offline database."
-
 async def main(page: ft.Page):
     page.title = "Falcon AI"
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -205,7 +203,7 @@ async def main(page: ft.Page):
             page.update()
 
         input_box.on_submit = send_click
-        send_btn = ft.ElevatedButton("Send", on_click=send_click, bgcolor="#0f172a", color="#ffffff")
+        send_btn = ft.Button("Send", on_click=send_click, bgcolor="#0f172a", color="#ffffff")
 
         page.add(
             ft.Container(height=15),
@@ -285,8 +283,7 @@ async def main(page: ft.Page):
             await asyncio.sleep(5)
 
         try:
-            if bg_audio is not None:
-                bg_audio.pause()
+            page.overlay.clear()
         except Exception:
             pass
         show_main_screen()
