@@ -1,0 +1,25 @@
+name: Build Falcon AI APK
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - run: pip install flet flet-video flet-audio
+      - run: flet build apk --project "Falcon AI" --org "com.falcon.ai"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Falcon-AI-APK
+          path: build/apk/*.apk
+          
