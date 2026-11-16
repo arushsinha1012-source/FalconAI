@@ -8,16 +8,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.29.0'
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - run: pip install flet flet-video flet-audio
-      - run: flet build apk --project "Falcon AI" --org "com.falcon.ai"
+      - run: pip install --upgrade flet flet-video flet-audio
+      - run: flet build apk --project "falcon_ai" --org "com.falcon.ai" --yes
       - uses: actions/upload-artifact@v4
         with:
           name: Falcon-AI-APK
