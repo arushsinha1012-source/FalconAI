@@ -12,15 +12,13 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.29.0'
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
       - run: pip install --upgrade flet flet-video flet-audio
-      - run: flet build apk --project "falcon_ai" --org "com.falcon.ai" --yes
+      - run: flet build apk --project "falcon_ai" --include-packages flet_video flet_audio
       - uses: actions/upload-artifact@v4
         with:
           name: Falcon-AI-APK
           path: build/apk/*.apk
-          
