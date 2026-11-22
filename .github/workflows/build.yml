@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - run: pip install --upgrade flet flet-video flet-audio
-      - run: flet build apk --project "falcon_ai"
+      - run: yes | flet build apk --project "falcon_ai"
       - uses: actions/upload-artifact@v4
         with:
           name: Falcon-AI-APK
