@@ -251,20 +251,20 @@ async def main(page: ft.Page):
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=4,
             ),
-            padding=ft.padding.only(top=36, bottom=16, left=16, right=16),
+            padding=ft.Padding.only(top=36, bottom=16, left=16, right=16),
             gradient=ft.LinearGradient(
                 begin=ft.Alignment.TOP_LEFT,
                 end=ft.Alignment.BOTTOM_RIGHT,
                 colors=["#1e1b4b", "#0f172a"],
             ),
-            border=ft.border.only(bottom=ft.BorderSide(1, "#334155")),
-            border_radius=ft.border_radius.only(bottom_left=24, bottom_right=24),
+            border=ft.Border.only(bottom=ft.BorderSide(1, "#334155")),
+            border_radius=ft.BorderRadius.only(bottom_left=24, bottom_right=24),
         )
 
         chat_list = ft.ListView(
             expand=True,
             spacing=12,
-            padding=ft.padding.symmetric(horizontal=16, vertical=12),
+            padding=ft.Padding.symmetric(horizontal=16, vertical=12),
             auto_scroll=True,
         )
 
@@ -278,7 +278,7 @@ async def main(page: ft.Page):
                 bgcolor="#1e293b",
                 padding=14,
                 border_radius=16,
-                border=ft.border.all(1, "#334155"),
+                border=ft.Border.all(1, "#334155"),
             )
         )
 
@@ -291,7 +291,7 @@ async def main(page: ft.Page):
             bgcolor="#1e293b",
             border_color="#475569",
             focused_border_color="#f472b6",
-            content_padding=ft.padding.symmetric(horizontal=18, vertical=12),
+            content_padding=ft.Padding.symmetric(horizontal=18, vertical=12),
         )
 
         def send_message(text_to_send=None):
@@ -306,7 +306,7 @@ async def main(page: ft.Page):
                             content=ft.Text(msg, color="#ffffff", size=14),
                             gradient=ft.LinearGradient(colors=["#db2777", "#9333ea"]),
                             padding=12,
-                            border_radius=ft.border_radius.only(
+                            border_radius=ft.BorderRadius.only(
                                 top_left=16, top_right=16, bottom_left=16, bottom_right=4
                             ),
                         )
@@ -326,9 +326,9 @@ async def main(page: ft.Page):
                         ft.Container(
                             content=ft.Text(reply, color="#f1f5f9", size=14),
                             bgcolor="#1e293b",
-                            border=ft.border.all(1, "#334155"),
+                            border=ft.Border.all(1, "#334155"),
                             padding=12,
-                            border_radius=ft.border_radius.only(
+                            border_radius=ft.BorderRadius.only(
                                 top_left=16, top_right=16, bottom_right=16, bottom_left=4
                             ),
                             expand=True,
@@ -344,7 +344,7 @@ async def main(page: ft.Page):
         send_btn = ft.Container(
             content=ft.Text("Send", color="#ffffff", weight=ft.FontWeight.BOLD),
             gradient=ft.LinearGradient(colors=["#ec4899", "#8b5cf6"]),
-            padding=ft.padding.symmetric(horizontal=18, vertical=13),
+            padding=ft.Padding.symmetric(horizontal=18, vertical=13),
             border_radius=24,
             on_click=lambda e: send_message(),
         )
@@ -354,25 +354,25 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Text("🌍 Capital of India", size=12, color="#cbd5e1"),
                     bgcolor="#1e293b",
-                    padding=ft.padding.symmetric(horizontal=10, vertical=6),
+                    padding=ft.Padding.symmetric(horizontal=10, vertical=6),
                     border_radius=14,
-                    border=ft.border.all(1, "#334155"),
+                    border=ft.Border.all(1, "#334155"),
                     on_click=lambda e: send_message("Capital of India"),
                 ),
                 ft.Container(
                     content=ft.Text("⚡ Relativity", size=12, color="#cbd5e1"),
                     bgcolor="#1e293b",
-                    padding=ft.padding.symmetric(horizontal=10, vertical=6),
+                    padding=ft.Padding.symmetric(horizontal=10, vertical=6),
                     border_radius=14,
-                    border=ft.border.all(1, "#334155"),
+                    border=ft.Border.all(1, "#334155"),
                     on_click=lambda e: send_message("Relativity"),
                 ),
                 ft.Container(
                     content=ft.Text("🧮 45 * 12", size=12, color="#cbd5e1"),
                     bgcolor="#1e293b",
-                    padding=ft.padding.symmetric(horizontal=10, vertical=6),
+                    padding=ft.Padding.symmetric(horizontal=10, vertical=6),
                     border_radius=14,
-                    border=ft.border.all(1, "#334155"),
+                    border=ft.Border.all(1, "#334155"),
                     on_click=lambda e: send_message("45 * 12"),
                 ),
             ],
@@ -382,21 +382,13 @@ async def main(page: ft.Page):
 
         bottom_bar = ft.Container(
             content=ft.Column([quick_chips, ft.Row([input_box, send_btn], spacing=8)], spacing=8),
-            padding=ft.padding.only(left=14, right=14, top=10, bottom=18),
+            padding=ft.Padding.only(left=14, right=14, top=10, bottom=18),
             bgcolor="#0f172a",
-            border=ft.border.only(top=ft.BorderSide(1, "#1e293b")),
+            border=ft.Border.only(top=ft.BorderSide(1, "#1e293b")),
         )
 
         page.add(ft.Column([header, chat_list, bottom_bar], expand=True, spacing=0))
         page.update()
-
-    bg_audio = None
-    try:
-        import flet_audio as fta
-        bg_audio = fta.Audio(src="song.mp3", autoplay=True)
-        page.overlay.append(bg_audio)
-    except Exception:
-        pass
 
     page.bgcolor = "#000000"
     page.padding = 0
@@ -422,13 +414,6 @@ async def main(page: ft.Page):
         )
         page.update()
         await asyncio.sleep(2)
-
-    try:
-        if bg_audio:
-            bg_audio.pause()
-        page.overlay.clear()
-    except Exception:
-        pass
 
     show_main_screen()
 
