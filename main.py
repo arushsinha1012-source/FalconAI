@@ -253,8 +253,8 @@ async def main(page: ft.Page):
             ),
             padding=ft.padding.only(top=36, bottom=16, left=16, right=16),
             gradient=ft.LinearGradient(
-                begin=ft.alignment.top_left,
-                end=ft.alignment.bottom_right,
+                begin=ft.Alignment.TOP_LEFT,
+                end=ft.Alignment.BOTTOM_RIGHT,
                 colors=["#1e1b4b", "#0f172a"],
             ),
             border=ft.border.only(bottom=ft.BorderSide(1, "#334155")),
@@ -406,7 +406,6 @@ async def main(page: ft.Page):
         petals_vid = ftv.Video(
             playlist=[ftv.VideoMedia("petals.mp4")],
             autoplay=True,
-            show_controls=False,
             expand=True,
             fit=ft.BoxFit.COVER,
         )
@@ -417,7 +416,7 @@ async def main(page: ft.Page):
         page.add(
             ft.Container(
                 content=ft.Text("🦅 Loading Falcon AI...", color="#ffffff", size=22, weight=ft.FontWeight.BOLD),
-                alignment=ft.alignment.center,
+                alignment=ft.Alignment.CENTER,
                 expand=True,
             )
         )
